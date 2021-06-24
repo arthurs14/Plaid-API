@@ -36,3 +36,18 @@ app.post('/create_link_token', async (request, response) => {
     return response.send({ error: e.message });
   }
 });
+
+app.post('/exchange_plaid_token', async (request, response) => {
+  try {
+    const publicToken = request.body.public_token;
+
+    // Exchange the client-side public_token for a server access_token
+    const tokenResponse = await client.exchangePublicToken(publicToken);
+
+    // Save the access_token and item_id to a persistent database
+    const accessToken = tokenResponse.access_token;
+    const itemId = tokenResponse.item_id;
+  } catch(e) {
+    return response.send({ error: e.message });
+  }
+});
